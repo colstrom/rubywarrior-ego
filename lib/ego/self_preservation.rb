@@ -13,7 +13,7 @@ module SelfPresevation
   end
 
   def wounds
-    MAX_HEALTH - health
+    MAX_HEALTH - (respond_to?(:health) ? health : MAX_HEALTH)
   end
 
   def taking_damage?
