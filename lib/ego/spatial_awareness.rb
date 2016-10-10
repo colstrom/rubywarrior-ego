@@ -13,6 +13,8 @@ module SpatialAwareness
 
   Contract None => HashOf[Direction, ArrayOf[Symbol]]
   def surroundings
+    return {} if numb?
+
     DIRECTIONS.map do |direction|
       [
         direction,
