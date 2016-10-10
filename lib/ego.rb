@@ -32,31 +32,9 @@ class Ego
     @acted = true
   end
 
-  def action(*args)
-    return unless @id.respond_to? __callee__
-    @id.send(__callee__, *args)
-  end
-
-  alias feel action
-  alias health action
-  alias look action
-
   def track(action)
     actions.push(action).tap { acted! }
   end
-
-  def action!(*args)
-    return if acted?
-    return unless @id.respond_to? __callee__
-    @id.send(__callee__, *args).tap { track __callee__ } unless acted?
-  end
-
-  alias walk! action!
-  alias attack! action!
-  alias rest! action!
-  alias rescue! action!
-  alias pivot! action!
-  alias shoot! action!
 
   def record_journey
     remember :path, path
@@ -67,5 +45,19 @@ class Ego
   def act
     tactics
     record_journey
+  end
+
+  def method_missing(method, *args)
+    return super unless @id.respond_to? method
+
+    if method.to_s.end_with? '!'
+      @id.public_send(method, *args).tap { track method } unless acted?
+    else
+      @id.public_send(method, *args)
+    end
+  end
+
+  def respond_to?(method)
+    @id.respond_to?(method) || super
   end
 end
