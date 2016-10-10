@@ -29,7 +29,7 @@ module SelfPresevation
   end
 
   def worth_resting?
-    wounds >= recoverable && look.find(&:enemy?)
+    wounds >= recoverable && (blind? ? true : look.find(&:enemy?))
   end
 
   def recoverable
