@@ -37,6 +37,8 @@ module SpatialAwareness
 
   Contract None => HashOf[Direction, ArrayOf[Symbol]]
   def visible
+    return {} if blind?
+
     DIRECTIONS.map do |direction|
       [
         direction,
