@@ -1,13 +1,17 @@
 require 'contracts'
+require_relative 'senses'
 
 module SpatialAwareness
   include ::Contracts::Core
   include ::Contracts::Builtin
+  include Senses
 
   DIRECTIONS = %i(forward backward left right).freeze
   Direction = Enum[*DIRECTIONS]
 
   def feelings
+    return [] if senses.empty?
+
     feel.class.instance_methods(false).select { |m| m.to_s.end_with? '?' }
   end
 
